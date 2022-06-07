@@ -1,5 +1,0 @@
-Verificar las excepciones en el manejo de archivos
-
-Crear repositorio para guardar imagenes en disco? Quizas para el siguiente Sprint
-
-Probar el programa con una herramienta externa
