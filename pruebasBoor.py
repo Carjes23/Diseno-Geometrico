@@ -14,6 +14,7 @@ boor = Boor(controlPoints, nodos, gradoBSpline)
 
 cxs = [controlPoints[i][0] for i in range(len(controlPoints))]
 cys = [controlPoints[i][1] for i in range(len(controlPoints))]
-plt.plot(cxs, cys,'.')
+plt.plot(cxs, cys, color = "black")
+plt.plot(cxs, cys, "s")
 plt.plot(xs, ys)
 plt.show()
