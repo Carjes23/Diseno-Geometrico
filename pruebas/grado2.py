@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 
 # 3 puntos de control, cuadratica, solo primer intervalo en t = (0, 0.5)
 # con 3 puntos es imposible recorrer todo el dominio
-def prueba3PuntosCuadratica1Intervalo():
+def prueba3PuntosGrado2Con1Intervalo():
   grado = 2
   points = np.array([[0,0], [1,1], [2, 1]])
-  knots = np.array([0, 0, 0, 0.5, 1.0, 1.0, 1.0])
+  knots = np.array([0, 0, 0, 1.0, 1.0, 1.0])
 
   X = []
   Y = []
@@ -27,7 +27,7 @@ def prueba3PuntosCuadratica1Intervalo():
 
 # 4 puntos de control, cuadratica, se recorren los 2 intervalos: (0, 0.2) y (0.2, 0.3)
 # Si entrego mas nodos de los necesarios, no se repiten los "ultimos 3"
-def prueba4PuntosCuadratica2IntervalosNodosInnecesarios():
+def prueba4PuntosGrado2Con2IntervalosNodosInnecesarios():
   grado = 2
   points = np.array([[0,0], [1,1], [2, 1], [3, 0]])
   knots = np.array([0, 0, 0, 0.2, 0.3, 0.4, 0.5, 1.0, 1.0, 1.0])
@@ -62,7 +62,7 @@ def prueba4PuntosCuadratica2IntervalosNodosInnecesarios():
 
 # 4 puntos de control, cuadratica, solo primer intervalo en t: (0, 0.2) y (0.2, 1.0)
 # ahora si se puede recorrer todo el dominio
-def prueba4PuntosCuadratica2Intervalos():
+def prueba4PuntosGrado2Con2Intervalos():
   grado = 2
   points = np.array([[0,0], [1,1], [2, 1], [3, 0]])
   knots = np.array([0, 0, 0, 0.2, 1.0, 1.0, 1.0])
@@ -94,6 +94,6 @@ def prueba4PuntosCuadratica2Intervalos():
   plt.scatter(X2,Y2, color='red', marker='+')
   plt.show()
 
-prueba3PuntosCuadratica1Intervalo()
-prueba4PuntosCuadratica2Intervalos()
-prueba4PuntosCuadratica2IntervalosNodosInnecesarios()
+prueba3PuntosGrado2Con1Intervalo()
+prueba4PuntosGrado2Con2Intervalos()
+prueba4PuntosGrado2Con2IntervalosNodosInnecesarios()

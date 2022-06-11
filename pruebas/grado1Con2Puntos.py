@@ -5,7 +5,7 @@ import math as m
 import matplotlib.pyplot as plt
 
 # 2 puntos de control
-def prueba2PuntosLineal1():
+def prueba2PuntosGrado1():
   grado = 1
   points = np.array([[0,0], [1,1]])
   knots = np.array([1, 1, 2.0, 2.0])
@@ -25,4 +25,4 @@ def prueba2PuntosLineal1():
   plt.scatter(X,Y, color='purple', marker='+')
   plt.show()
 
-prueba2PuntosLineal1()
+prueba2PuntosGrado1()
