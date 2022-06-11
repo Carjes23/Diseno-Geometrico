@@ -14,7 +14,6 @@ def calcularPuntoEnIntervalo(i: int, x: int, nodos, c, grado: int):
     for r in range(1, grado + 1):
         for j in range(grado, r - 1, -1):
             alpha = (x - nodos[j + i - grado]) / (nodos[j + 1 + i - r] - nodos[j + i - grado])
-            print(f'r: {r}, j: {j} - alpha: {alpha}')
             d[j] = (1.0 - alpha) * d[j - 1] + alpha * d[j]
 
     return d[grado]
