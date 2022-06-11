@@ -4,7 +4,7 @@ import math as m
 import matplotlib.pyplot as plt
 
 # 4 puntos de control, cubica, 1 intervalo t = (0, 1)
-def prueba4PuntosCuadratica1Intervalo():
+def prueba4PuntosGrado3Con1Intervalo():
   grado = 3
   points = np.array([[0,0], [-1,1], [1, 2], [2, 2]])
   knots = np.array([0, 0, 0, 0, 1.0, 1.0, 1.0, 1.0])
@@ -25,7 +25,7 @@ def prueba4PuntosCuadratica1Intervalo():
   plt.show()
 
 # 4 puntos de control, cubica, 1 intervalo t = (0, 1)
-def prueba4PuntosCuadratica1Intervalo2():
+def prueba4PuntosGrado3Con1Intervalo2():
   grado = 3
   points = np.array([[0,0], [-1,1], [1, 2], [2, 2], [3, 1], [4, 0]])
   knots = np.array([0, 0, 0, 0, 1.0, 1.0, 1.0, 1.0])
@@ -46,7 +46,7 @@ def prueba4PuntosCuadratica1Intervalo2():
   plt.show()
 
 # 5 puntos de control, cubica, 2 intervalos t = (0, 0.5) y (0.5, 1)
-def prueba5PuntosCuadratica2Intervalos():
+def prueba5PuntosGrado3Con2Intervalos():
   grado = 3
   points = np.array([[0,0], [-1,1], [1, 2], [2, 2], [3, 1], [4, 0]])
   knots = np.array([0, 0, 0, 0, 0.5, 1.0, 1.0, 1.0, 1.0])
@@ -80,7 +80,7 @@ def prueba5PuntosCuadratica2Intervalos():
   plt.show()
 
 # 6 puntos de control, cubica, 2 intervalos t = (0, 0.5), (0.5, 0.7) y (0.7, 1.0)
-def prueba6PuntosCuadratica3Intervalos():
+def prueba6PuntosGrado3Con3Intervalos():
   grado = 3
   points = np.array([[0,0], [-1,1], [1, 2], [2, 2], [3, 1], [4, 0]])
   knots = np.array([0, 0, 0, 0, 0.5, 0.7, 1.0, 1.0, 1.0, 1.0])
@@ -124,7 +124,7 @@ def prueba6PuntosCuadratica3Intervalos():
   plt.scatter(X3,Y3, color='green', marker='+')
   plt.show()
 
-prueba4PuntosCuadratica1Intervalo()
-prueba4PuntosCuadratica1Intervalo2()
-prueba5PuntosCuadratica2Intervalos()
-prueba6PuntosCuadratica3Intervalos()
+prueba4PuntosGrado3Con1Intervalo()
+prueba4PuntosGrado3Con1Intervalo2()
+prueba5PuntosGrado3Con2Intervalos()
+prueba6PuntosGrado3Con3Intervalos()
