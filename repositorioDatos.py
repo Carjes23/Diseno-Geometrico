@@ -2,7 +2,7 @@ import csv
 
 class RepositorioDatos:
   def __init__(self):
-    self.nombreArchivoPuntosControl = "datos/puntosControl2.txt"
+    self.nombreArchivoPuntosControl = "datos/puntosControl.txt"
     self.nombreArchivoNodos = "datos/nodos.txt"
     return
 

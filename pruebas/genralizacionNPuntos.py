@@ -86,10 +86,9 @@ puntos = [[0,0], [-1,1], [1, 2], [2, 2], [3, 1.5], [4, 0], [2, -1]]
 nodos = [0, 0.3, 1.0]
 pruebaNPuntos(grado, puntos, nodos)
 
-grado = 5
+grado = 6
 # 7 puntos
 puntos = [[0,0], [-1,1], [1, 2], [2, 2], [3, 1.5], [4, 0], [2, -1]]
 # 2 nodos
 nodos = [0, 1]
 pruebaNPuntos(grado, puntos, nodos)
-

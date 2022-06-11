@@ -1,48 +1,67 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
-class Boor:
-    def __init__(self, controlPoints, nodos, grado):
-        self.controlPoints = np.array(controlPoints)
-        self.nodos = np.array(self.ampliarNodos(nodos, grado))
-        self.grado = grado
-        self.num_divisiones = len(self.nodos)
-        return
-    
-    def ampliarNodos(self, nodos, grado):
-        primerElemento = nodos[0]
-        ultimoElemento = nodos[-1]
-        for i in range(grado):
-            nodos.insert(0,primerElemento)
-            nodos.append(ultimoElemento)
-        return nodos
+def Boor(grado, puntos, nodos, numPuntosPorIntervalo = 20):
 
-    def calcularPuntos(self):
-        xs = []
-        ys = []
-        maxpoints = len(self.nodos) #maxima cantidad de nodos
-        for rango in range(self.grado,maxpoints-self.grado-1):
-            divisiones = np.linspace(self.nodos[rango],self.nodos[rango+1],self.num_divisiones)      
-            for punto in divisiones:
-                result = self.calcularPuntosEnIntervalo(rango, punto, self.nodos, self.controlPoints, self.grado)
-                xs.append(result[0])
-                ys.append(result[1])
-        return (xs,ys)
+  numNodos = len(nodos)
+  numIntervalosRealesMenos1 = len(nodos) - 2
 
-    def calcularPuntosEnIntervalo(self, k, x, t, c, p):
-        """
-        Argumentos
-        ----
-        k: indice del intervalo del nodo que contiene a x
-        x: posicion
-        t: matriz de posiciones de nodos
-        c: matriz de puntos de control
-        p: grado del B-spline
-        """
-        d = [c[j + k - p] for j in range(0, p+1)]
+  nodosAmpliados = ampliarNodos(nodos, grado)
+  nodosAmpliados = np.array(nodosAmpliados)
 
-        for r in range(1, p+1):
-            for j in range(p, r-1, -1):
-                alpha = (x - t[j+k-p]) / (t[j+1+k-r] - t[j+k-p])
-                d[j] = (1.0 - alpha) * d[j-1] + alpha * d[j]
+  puntos = np.array(puntos)
+  numPuntosControl = len(puntos)
 
-        return d[p]
+  #TODO: Lanzar excepcion
+  minNumeroPuntosControl= grado + 1
+  if minNumeroPuntosControl > numPuntosControl:
+    print(f'ERROR minimo numero de puntos de control es (grado + 1): {grado + 1}')
+    exit()
+  
+  #TODO: Lanzar excepcion
+  numValidoNodos = numPuntosControl + 1 - grado
+  if numNodos != numValidoNodos:
+    print(f'El numero valido de nodos es: (numPuntosControl + 1 - grado): {numPuntosControl + 1 - grado}')
+    exit()
+
+  X = []
+  Y = []
+  for indiceNodo in range(grado, (grado + numIntervalosRealesMenos1) + 1):
+    inicial = nodosAmpliados[indiceNodo]
+    final = nodosAmpliados[indiceNodo+1]
+    dominio = np.linspace(inicial,final, numPuntosPorIntervalo)
+  
+    for x in dominio:
+      res = calcularPuntoEnIntervalo(indiceNodo, x, nodosAmpliados, puntos, grado)
+      X.append(res[0])
+      Y.append(res[1])
+  
+  return (X, Y)
+       
+def ampliarNodos(nodos, grado):
+    primerElemento = nodos[0]
+    ultimoElemento = nodos[-1]
+    for i in range(grado):
+        nodos.insert(0,primerElemento)
+        nodos.append(ultimoElemento)
+    return nodos
+
+def calcularPuntoEnIntervalo(i: int, x: int, nodos, c, grado: int):
+    """Evaluates S(x).
+
+    Arguments
+    ---------
+    i: Index of knot interval that contains x.
+    x: Position.
+    nodos: Array of knot positions, needs to be padded as described above.
+    c: Array of control points.
+    grado: Degree of B-spline.
+    """
+    d = [c[j + i - grado] for j in range(0, grado + 1)]
+
+    for r in range(1, grado + 1):
+        for j in range(grado, r - 1, -1):
+            alpha = (x - nodos[j + i - grado]) / (nodos[j + 1 + i - r] - nodos[j + i - grado])
+            d[j] = (1.0 - alpha) * d[j - 1] + alpha * d[j]
+
+    return d[grado]
