@@ -6,8 +6,8 @@ def Boor(grado, puntos, nodos, numPuntosPorIntervalo = 20):
   numNodos = len(nodos)
   numIntervalosRealesMenos1 = len(nodos) - 2
 
-  nodosAmpliados = ampliarNodos(nodos, grado)
-  nodosAmpliados = np.array(nodosAmpliados)
+  # nodosAmpliados = ampliarNodos(nodos, grado)
+  # nodosAmpliados = np.array(nodosAmpliados)
 
   puntos = np.array(puntos)
   numPuntosControl = len(puntos)
