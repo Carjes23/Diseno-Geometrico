@@ -47,15 +47,13 @@ def ampliarNodos(nodos, grado):
     return nodos
 
 def calcularPuntoEnIntervalo(i: int, x: int, nodos, c, grado: int):
-    """Evaluates S(x).
-
-    Arguments
+    """Argumentos
     ---------
-    i: Index of knot interval that contains x.
-    x: Position.
-    nodos: Array of knot positions, needs to be padded as described above.
-    c: Array of control points.
-    grado: Degree of B-spline.
+    i: Índice del intervalo de nodos que contiene a las x.
+    x: Posición.
+    nodos: Colección (array) de las posiciones de los nodos.
+    c: Colección (array) de puntos de control.
+    grado: Grado del B-spline.
     """
     d = [c[j + i - grado] for j in range(0, grado + 1)]
 
