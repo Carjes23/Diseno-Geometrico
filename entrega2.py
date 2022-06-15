@@ -1,9 +1,12 @@
 import numpy as np
+from math import floor
 from boor import Boor
-def aproxDeNodos(t,n,p,k,l):
+def aproxDeNodos(t,m,n,p,k,l):
     """Argumentos
     ---------
     t: Parámetros ingresados en forma de lista.
+    #TODO: Resolver el significado de m.
+    m: Último parámetro.
     n: Mayor índice de los puntos de control.
     p: Grado del B-spline.
     k: Mayor grado de la derivada del primer parámetro.
@@ -13,7 +16,6 @@ def aproxDeNodos(t,n,p,k,l):
     for i in range(0,p+1):
         U[i] = t[0]
         U[n+i+1] = t[-1]
-    m= t[-1]
     nc = n-k-l
     inc = (m+1)/(nc+1)
     low = 0
@@ -22,17 +24,13 @@ def aproxDeNodos(t,n,p,k,l):
     w = np.zeros(nc+5)
     for i in range(0,nc+1):
         d = d + inc
-        if type(d) == int:
-            high = d
-        elif d >= 0:
-            high = int(d)
-        else:
-            high = int(d)-1
+        high= floor(d+0.5)
         sum = 0
         for j in range(low,high+1):
             sum += t[j]
-        w[i] = sum/(high-low)
+        w[i] = sum/(high-low+1)
         low = high + 1
+
     iss = 1 - k
     ie = nc - p + l
     r = p
@@ -41,7 +39,7 @@ def aproxDeNodos(t,n,p,k,l):
         je = min(nc,i+p-1)
         r += 1
         sum = 0
-        for j in range(js+je+1):
+        for j in range(js,je+1):
             sum += w[j]
         U[r] = sum / (je-js+1)
     return U
@@ -95,7 +93,7 @@ def deBoor(k: int, x: int, t, c, p: int):
 
     return d[p]
 para = [i for i in range(0,31)]
-knots = entrega2(para,30,9,3,2,2)
+knots = aproxDeNodos(para,30,9,3,2,2)
 points = entrega22(para,30,9,3,2,2)
 print(len(knots), len(points))
 p = 3
