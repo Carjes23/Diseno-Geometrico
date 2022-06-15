@@ -1,10 +1,19 @@
 import numpy as np
 from boor import Boor
-def entrega2(t,m,n,p,k,l):
-    U = np.zeros(n+p+2)
+def aproxDeNodos(t,n,p,k,l):
+    """Argumentos
+    ---------
+    t: Parámetros ingresados en forma de lista.
+    n: Mayor índice de los puntos de control.
+    p: Grado del B-spline.
+    k: Mayor grado de la derivada del primer parámetro.
+    l: Mayor grado de la derivada del último parámetro 
+    """
+    U = np.zeros(n+p+2) #Se inicializa el vector de nodos
     for i in range(0,p+1):
         U[i] = t[0]
         U[n+i+1] = t[-1]
+    m= t[-1]
     nc = n-k-l
     inc = (m+1)/(nc+1)
     low = 0
@@ -36,6 +45,7 @@ def entrega2(t,m,n,p,k,l):
             sum += w[j]
         U[r] = sum / (je-js+1)
     return U
+
 def entrega22(t,m,n,p,k,l):
     mh = m/2
     tp = (p+1)*((m+1)/n+1)
@@ -68,15 +78,13 @@ def entrega22(t,m,n,p,k,l):
         j += 1
     return s
 def deBoor(k: int, x: int, t, c, p: int):
-    """Evaluates S(x).
-
-    Arguments
+    """Argumentos
     ---------
-    k: Index of knot interval that contains x.
-    x: Position.
-    t: Array of knot positions, needs to be padded as described above.
-    c: Array of control points.
-    p: Degree of B-spline.
+    i: Índice del intervalo de nodos que contiene a las x.
+    x: Posición.
+    nodos: Colección (array) de las posiciones de los nodos.
+    c: Colección (array) de puntos de control.
+    grado: Grado del B-spline.
     """
     d = [c[j + k - p] for j in range(0, p + 1)]
 
