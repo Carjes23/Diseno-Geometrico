@@ -1,6 +1,17 @@
 import numpy as np
 from math import floor, ceil
 from boor import Boor
+
+def aproxParametros(q):
+    t=[]
+    t.append(0)
+    d=0
+    for dato in range(1, len(q)-1):
+        d+=(abs(int(q[dato])-int(q[dato-1]))) #Falta una iteración, revisar
+    for i in range(len(q)-1):
+        t.append(t[i-1]+ (abs(int(q[i])-int(q[i-1]))/d))
+    return t
+
 def aproxDeNodos(t,m,n,p,k,l):
     """Argumentos
     ---------
