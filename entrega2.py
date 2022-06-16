@@ -1,5 +1,5 @@
 import numpy as np
-from math import floor
+from math import floor, ceil
 from boor import Boor
 def aproxDeNodos(t,m,n,p,k,l):
     """Argumentos
@@ -21,7 +21,7 @@ def aproxDeNodos(t,m,n,p,k,l):
     low = 0
     high = 0
     d = -1
-    w = np.zeros(nc+5)
+    w = np.zeros(nc+1) 
     for i in range(0,nc+1):
         d = d + inc
         high= floor(d+0.5)
@@ -44,25 +44,13 @@ def aproxDeNodos(t,m,n,p,k,l):
         U[r] = sum / (je-js+1)
     return U
 
-def entrega22(t,m,n,p,k,l):
+def estDerivadas(t,m,n,p,k,l):
     mh = m/2
-    tp = (p+1)*((m+1)/n+1)
-    if type(tp) == int:
-        tp = tp
-    elif tp >= 0:
-        tp = int(tp)+1
-    else:
-        tp = int(tp)
+    tp = ceil((p+1)*((m+1)/(n+1)))
     iss = max(mh,m-tp)
     ie = min(mh,tp)
     ml = m-iss+ie
-    nl = n*((ml)/m)
-    if type(nl) == int:
-        nl = nl
-    elif nl >= 0:
-        nl = int(nl)+1
-    else:
-        nl = int(nl)
+    nl = ceil(n*((ml)/m))
     s = []
     s.append(0)
     i = int(iss+1)
@@ -75,6 +63,39 @@ def entrega22(t,m,n,p,k,l):
         i += 1
         j += 1
     return s
+
+# def matriz(t,m,n,p,k,l):
+#     rj = p;
+#     sj = p-k-1;
+#     ej = -2-k;
+#     nd = n-k-l-2;
+#     N= np.zeros(m-1,p)
+#     for i in range (0, m-1): #Pregunta
+#         for j in range (0, p):
+#             N[i][j] = 0
+#     start=[]
+#     end=[]
+#     for i in range (0, nd):
+#         start[i] = 0
+#         end[i] = m-2
+#     for i in range (1, m-1):
+#         #j ← span index of [uj,uj+1) ti is in
+#     li = max(j-p,k + 1);
+#     hi = min(j,n-l-1);
+#     #put Nli,. . .,Nhi in matrix left padded;
+#     #index[i − 1] = max(0,j − p − k − 1);
+#     if(j > rj):
+#     for kk in range (1, j-rj):
+#         sj = sj + 1 
+#         ej = ej + 1
+#     if(sj <= nd):
+#         start[sj] = i-1
+#     if(ej >= 0): 
+#         end[ej] = i-2
+
+
+
+
 def deBoor(k: int, x: int, t, c, p: int):
     """Argumentos
     ---------
@@ -92,23 +113,27 @@ def deBoor(k: int, x: int, t, c, p: int):
             d[j] = (1.0 - alpha) * d[j - 1] + alpha * d[j]
 
     return d[p]
+
 para = [i for i in range(0,31)]
 knots = aproxDeNodos(para,30,9,3,2,2)
-points = entrega22(para,30,9,3,2,2)
+points = estDerivadas(para,30,9,3,2,2)
 print(len(knots), len(points))
 p = 3
 cant_divisiones = 20
 X = []
 Y = []
-trazadores = []
-maxpoints = len(knots) #maxima cantidad de nodos
-for rango in range(p,maxpoints-p-1):
-    divisiones = np.linspace(knots[rango],knots[rango+1],cant_divisiones)      
-    for punto in divisiones:
-        result = deBoor(rango, punto, knots, points, p)
-        print(result)
-        X.append(result[0])
-        Y.append(result[1])
-plt.plot(points[:,0], points[:,1],'.')
-plt.plot(X,Y)
-plt.show()
+print(para)
+print(knots)
+print(points)
+# trazadores = []
+# maxpoints = len(knots) #maxima cantidad de nodos
+# for rango in range(p,maxpoints-p-1):
+#     divisiones = np.linspace(knots[rango],knots[rango+1],cant_divisiones)      
+#     for punto in divisiones:
+#         result = deBoor(rango, punto, knots, points, p)
+#         print(result)
+#         X.append(result[0])
+#         Y.append(result[1])
+# plt.plot(points[:,0], points[:,1],'.')
+# plt.plot(X,Y)
+# plt.show()
