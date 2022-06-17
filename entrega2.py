@@ -28,7 +28,7 @@ def aproxDeNodos(t,n,p,k,l):
         U[i] = t[0]  
         U[n+i+1] = t[-1]
     #Obtener ponderados representativos
-    nc = n-k-l
+    nc = n-k-l #No se tienen en cuenta los puntos de control de las derivadas
     inc = (m+1)/(nc+1)
     low = 0
     high = 0
@@ -56,8 +56,9 @@ def aproxDeNodos(t,n,p,k,l):
         U[r] = sum / (je-js+1)
     return U
 
-def estDerivadas(t,m,n,p,k,l):
-    mh = m/2
+def estDerivadas(t,n,p,k,l):
+    m= len(t)-1
+    mh = m/2 
     tp = ceil((p+1)*((m+1)/(n+1)))
     iss = max(mh,m-tp)
     ie = min(mh,tp)
@@ -87,34 +88,36 @@ print(points)
 
 #CODIGO DE LA MATRIZ N
 
-# def matriz(t,m,n,p,k,l):
-#     rj = p;
-#     sj = p-k-1;
-#     ej = -2-k;
-#     nd = n-k-l-2;
-#     N= np.zeros(m-1,p)
-#     for i in range (0, m-1): #Pregunta
-#         for j in range (0, p):
-#             N[i][j] = 0
-#     start=[]
-#     end=[]
-#     for i in range (0, nd):
-#         start[i] = 0
-#         end[i] = m-2
-#     for i in range (1, m-1):
-#         #j ← span index of [uj,uj+1) ti is in
-#     li = max(j-p,k + 1);
-#     hi = min(j,n-l-1);
-#     #put Nli,. . .,Nhi in matrix left padded;
-#     #index[i − 1] = max(0,j − p − k − 1);
-#     if(j > rj):
-#     for kk in range (1, j-rj):
-#         sj = sj + 1 
-#         ej = ej + 1
-#     if(sj <= nd):
-#         start[sj] = i-1
-#     if(ej >= 0): 
-#         end[ej] = i-2
+def matriz(t,n,p,k,l):
+    m=len(t)-1
+    rj = p #
+    sj = p-k-1
+    ej = -2-k
+    nd = n-k-l-2
+    N= np.zeros(m-1,p)
+    for i in range (0, m-1): #Pregunta
+        for j in range (0, p):
+            N[i][j] = 0
+    start=[]
+    end=[]
+    index=[]
+    for i in range (0, nd):
+        start[i] = 0 #array that keeps track of the matrix index of the first non-zero B-spline in each column
+        end[i] = m-2 #array that keeps track of the matrix index of the last non-zero B-spline in each column
+        for i in range (1, m-1):
+            #j ← span index of [uj,uj+1) ti is in
+            li = max(j-p,k + 1)
+            hi = min(j,n-l-1)
+            #put Nli,. . .,Nhi in matrix left padded;
+            index[i-1] = max(0,j-p-k-1)
+            if(j > rj):
+                for kk in range (1, j-rj):
+                    sj = sj + 1 
+                    ej = ej + 1
+                    if(sj <= nd):
+                        start[sj] = i-1
+                    if(ej >= 0): 
+                        end[ej] = i-2
 
 #INTENTO DE GRAFICAR 1
 
