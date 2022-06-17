@@ -6,8 +6,8 @@ def Boor(grado, puntos, nodos, numPuntosPorIntervalo = 20):
   numNodos = len(nodos)
   numIntervalosRealesMenos1 = len(nodos) - 2
 
-  # nodosAmpliados = ampliarNodos(nodos, grado)
-  # nodosAmpliados = np.array(nodosAmpliados)
+  nodosAmpliados = ampliarNodos(nodos, grado)
+  nodosAmpliados = np.array(nodosAmpliados)
 
   puntos = np.array(puntos)
   numPuntosControl = len(puntos)
@@ -26,6 +26,8 @@ def Boor(grado, puntos, nodos, numPuntosPorIntervalo = 20):
 
   X = []
   Y = []
+  Z = []
+  a=0
   for indiceNodo in range(grado, (grado + numIntervalosRealesMenos1) + 1):
     inicial = nodosAmpliados[indiceNodo]
     final = nodosAmpliados[indiceNodo+1]
@@ -33,10 +35,18 @@ def Boor(grado, puntos, nodos, numPuntosPorIntervalo = 20):
   
     for x in dominio:
       res = calcularPuntoEnIntervalo(indiceNodo, x, nodosAmpliados, puntos, grado)
-      X.append(res[0])
-      Y.append(res[1])
-  
-  return (X, Y)
+      if len(res)>2:
+        X.append(res[0])
+        Y.append(res[1])
+        Z.append(res[2])
+        a=1
+      else:
+        X.append(res[0])
+        Y.append(res[1])
+  if a==1:
+    return (X, Y, Z)
+  else:
+    return (X, Y)
        
 def ampliarNodos(nodos, grado):
     primerElemento = nodos[0]

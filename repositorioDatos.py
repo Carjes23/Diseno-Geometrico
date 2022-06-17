@@ -2,8 +2,8 @@ import csv
 
 class RepositorioDatos:
   def __init__(self):
-    self.nombreArchivoPuntosControl = "datos/puntosControl.txt"
-    self.nombreArchivoNodos = "datos/nodos.txt"
+    self.nombreArchivoPuntosControl = "datos/puntosControl3d.txt"
+    self.nombreArchivoNodos = "datos/nodos1.txt"
     return
 
   def getNombreArchivoPuntosControl(self):
@@ -45,6 +45,19 @@ class RepositorioDatos:
   def convertirLineasAPuntos(self, lineas):
     puntos = []
     for linea in lineas:
+      if len(linea)>2:
+        try:
+          x = float(linea[0])
+          y = float(linea[1])
+          z = float(linea[2])
+          puntos.append([x, y, z])
+        except IndexError:
+          print("No se encuentran solo dos puntos de control por línea.")
+          exit()
+        except ValueError:
+          print("Los puntos de control deben ser de caracter numérico.")
+          exit()
+      else:
         try:
           x = float(linea[0])
           y = float(linea[1])
