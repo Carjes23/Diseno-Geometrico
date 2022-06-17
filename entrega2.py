@@ -13,17 +13,16 @@ def aproxParametros(q):
     t.append(1)
     return t
 
-def aproxDeNodos(t,m,n,p,k,l):
+def aproxDeNodos(t,n,p,k,l):
     """Argumentos
     ---------
     t: Parámetros ingresados en forma de lista.
-    #TODO: Resolver el significado de m, podría ser un valor que me den o el len(t)
-    m: Último parámetro.
     n: Mayor índice de los puntos de control.
     p: Grado del B-spline.
     k: Mayor grado de la derivada del primer parámetro.
     l: Mayor grado de la derivada del último parámetro 
     """
+    m= len(t)-1
     U = np.zeros(n+p+2) #Se inicializa el vector de nodos
     for i in range(0,p+1): #Los nodos con multiplicidad de p al principio y al final
         U[i] = t[0]  
@@ -79,8 +78,8 @@ def estDerivadas(t,m,n,p,k,l):
 
 Q = [i for i in range(0,31)]
 para = aproxParametros(Q)
-knots = aproxDeNodos(para,30,9,3,2,2)
-points = estDerivadas(para,30,9,3,2,2)
+knots = aproxDeNodos(para,9,3,2,2)
+points = estDerivadas(para,9,3,2,2)
 print(len(knots), len(points))
 print(para)
 print(knots)
