@@ -17,7 +17,7 @@ def aproxDeNodos(t,m,n,p,k,l):
     """Argumentos
     ---------
     t: Parámetros ingresados en forma de lista.
-    #TODO: Resolver el significado de m.
+    #TODO: Resolver el significado de m, podría ser un valor que me den o el len(t)
     m: Último parámetro.
     n: Mayor índice de los puntos de control.
     p: Grado del B-spline.
@@ -25,9 +25,10 @@ def aproxDeNodos(t,m,n,p,k,l):
     l: Mayor grado de la derivada del último parámetro 
     """
     U = np.zeros(n+p+2) #Se inicializa el vector de nodos
-    for i in range(0,p+1):
-        U[i] = t[0]
+    for i in range(0,p+1): #Los nodos con multiplicidad de p al principio y al final
+        U[i] = t[0]  
         U[n+i+1] = t[-1]
+    #Obtener ponderados representativos
     nc = n-k-l
     inc = (m+1)/(nc+1)
     low = 0
@@ -42,7 +43,7 @@ def aproxDeNodos(t,m,n,p,k,l):
             sum += t[j]
         w[i] = sum/(high-low+1)
         low = high + 1
-
+    #Obtener los nodos a partir de los ponderados
     iss = 1 - k
     ie = nc - p + l
     r = p
@@ -76,6 +77,17 @@ def estDerivadas(t,m,n,p,k,l):
         j += 1
     return s
 
+Q = [i for i in range(0,31)]
+para = aproxParametros(Q)
+knots = aproxDeNodos(para,30,9,3,2,2)
+points = estDerivadas(para,30,9,3,2,2)
+print(len(knots), len(points))
+print(para)
+print(knots)
+print(points)
+
+#CODIGO DE LA MATRIZ N
+
 # def matriz(t,m,n,p,k,l):
 #     rj = p;
 #     sj = p-k-1;
@@ -105,38 +117,30 @@ def estDerivadas(t,m,n,p,k,l):
 #     if(ej >= 0): 
 #         end[ej] = i-2
 
+#INTENTO DE GRAFICAR 1
 
+# def deBoor(k: int, x: int, t, c, p: int):
+#     """Argumentos
+#     ---------
+#     k: Índice del intervalo de nodos que contiene a las x.
+#     x: Posición.
+#     nodos: Colección (array) de las posiciones de los nodos.
+#     c: Colección (array) de puntos de control.
+#     grado: Grado del B-spline.
+#     """
+#     d = [c[j + k - p] for j in range(0, p + 1)]
 
+#     for r in range(1, p + 1):
+#         for j in range(p, r - 1, -1):
+#             alpha = (x - t[j + k - p]) / (t[j + 1 + k - r] - t[j + k - p])
+#             d[j] = (1.0 - alpha) * d[j - 1] + alpha * d[j]
 
-def deBoor(k: int, x: int, t, c, p: int):
-    """Argumentos
-    ---------
-    i: Índice del intervalo de nodos que contiene a las x.
-    x: Posición.
-    nodos: Colección (array) de las posiciones de los nodos.
-    c: Colección (array) de puntos de control.
-    grado: Grado del B-spline.
-    """
-    d = [c[j + k - p] for j in range(0, p + 1)]
+#     return d[p]
 
-    for r in range(1, p + 1):
-        for j in range(p, r - 1, -1):
-            alpha = (x - t[j + k - p]) / (t[j + 1 + k - r] - t[j + k - p])
-            d[j] = (1.0 - alpha) * d[j - 1] + alpha * d[j]
-
-    return d[p]
-
-para = [i for i in range(0,31)]
-knots = aproxDeNodos(para,30,9,3,2,2)
-points = estDerivadas(para,30,9,3,2,2)
-print(len(knots), len(points))
-p = 3
-cant_divisiones = 20
-X = []
-Y = []
-print(para)
-print(knots)
-print(points)
+# p = 3
+# cant_divisiones = 20
+# X = []
+# Y = []
 # trazadores = []
 # maxpoints = len(knots) #maxima cantidad de nodos
 # for rango in range(p,maxpoints-p-1):
@@ -148,4 +152,25 @@ print(points)
 #         Y.append(result[1])
 # plt.plot(points[:,0], points[:,1],'.')
 # plt.plot(X,Y)
+# plt.show()
+
+
+#INTENTO DE GRAFICAR 2
+
+# import matplotlib.pyplot as plt
+
+# from repositorioDatos import RepositorioDatos
+# from boor import Boor
+
+# repo = RepositorioDatos()
+# puntos = points
+# nodos = knots
+# grado = 3
+
+# (xs, ys) = Boor(grado, puntos, nodos, 50)
+# cxs = [puntos[i][0] for i in range(len(puntos))]
+# cys = [puntos[i][1] for i in range(len(puntos))]
+# plt.plot(cxs, cys, color = "black")
+# plt.plot(cxs, cys, "s")
+# plt.plot(xs, ys)
 # plt.show()
