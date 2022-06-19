@@ -13,7 +13,6 @@ def calculaT(Q):
     diff = Q[r] - Q[r-1]
     d += np.sqrt(diff.dot(diff))
 
-  # print(f'd: {d}')
 
   for r in range(1, m+1):
     diff = Q[r] - Q[r-1]
@@ -74,26 +73,20 @@ def calcularInvNTN(l, p, T, m, U):
     N = np.array(N)
     NT = np.transpose(N)
     NTN = np.matmul(NT, N)
-    #print(f'NTN: {NTN}')
     invNTN = np.linalg.inv(NTN)
-    #print(f'invNTN: {invNTN}')
     return invNTN
 
 
 
 Q = np.array([[0, 0], [1, 1], [2, 1.5], [3, 0],[4,2]])
-#Q = np.array([[0, 0], [1, 0], [3, 0], [8, 0]])
 
 i = 0
 l = 0
 p = 2
 
 T = calculaT(Q)
-#print(f'T: {T}')
 m = len(Q) -1
 
-# n es el indice m'as alto de los puntos de control
-# como no hay derivadas, entonces coincide con n
 n = m
 
 U = calcularU(i, l, T, p, m, n)
@@ -101,18 +94,7 @@ print(len(U))
 print(f'U: {U}')
 
 invNTN = calcularInvNTN(l, p, T, m, U)
-# como no hay derivadas R, Q
-
-# Quito el primer y ultimo elementos, P_0 = Q_0, P_3 = Q_3
-# R = Q.copy()
-# R = [[0.0 for i in range(k + 1, m)] for j in range(n-l-k-1)]
-# print(f'R: {R}')
-
-# R1 = Q1, R2 = Q2
-# P0 = Q[0]
-# P1 = invNTN[0][0] * Q[1] + invNTN[0][1] * Q[2]
-# P2 = invNTN[1][0] * Q[1] + invNTN[1][1] * Q[2]
-# P3 = Q[3]
+# c
 numElemen = len(Q)
 Pi = np.dot(invNTN,Q[1:numElemen-1])
 P = np.zeros((numElemen,2), float) #Confirmar si es cierto
@@ -133,46 +115,3 @@ plt.scatter(Q[:,0], Q[:,1],marker='X')
 plt.scatter(X,Y, color='purple', marker='+')
 plt.show()
 
-# # N_{1}(t_1)
-# k = findSpan(n, p, T[1], U)
-# N11 = basisFunction(k, p, T[1], U)
-# #print(f'N_{k-p}(1): {N11}')
-# print(f'N_{k}(1): {N11}')
-
-# # N_{2}(t_1)
-# k = findSpan(n, p, T[1], U)
-# N21 = basisFunction(k, p, T[1], U)
-# #print(f'N_{k-p}(1): {N21}')
-# print(f'N_{k}(1): {N21}')
-
-# # N_{1}(t_2)
-# k = findSpan(n, p, T[2], U)
-# N12 = basisFunction(k, p, T[2], U)
-# #print(f'N_{k-p}(2): {N12}')
-# print(f'N_{k}(2): {N12}')
-
-# # N_{2}(t_2)
-# k = findSpan(n, p, T[2], U)
-# N22 = basisFunction(k, p, T[2], U)
-# #print(f'N_{k-p}(2): {N22}')
-# print(f'N_{k}(2): {N22}')
-
-# # N_{1}(t_3)
-# k = findSpan(n, p, T[3], U)
-# N13 = basisFunction(k, p, T[3], U)
-# #print(f'N_{k-p}(3): {N13}')
-# print(f'N_{k}(3): {N13}')
-
-# # N_{2}(t_3)
-# k = findSpan(n, p, T[3], U)
-# N23 = basisFunction(k, p, T[3], U)
-# #print(f'N_{k-p}(3): {N23}')
-# print(f'N_{k}(3): {N23}')
-
-# print([[N11, N21], [N12, N22], [N13, N23]])
-# N = np.array([[N11, N21], [N12, N22], [N13, N23]])
-# NT = np.transpose(N)
-# NTN = np.matmul(NT, N)
-# invNTN = np.invert(NTN)
-
-# print(invNTN)
