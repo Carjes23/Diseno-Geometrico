@@ -1,4 +1,6 @@
 from math import floor
+from turtle import color
+from xml.etree.ElementTree import PI
 from matplotlib import pyplot as plt
 import numpy as np
 from bsplines import basisFunction
@@ -60,11 +62,12 @@ def calcularU(k, l, T, p, m, n):
     
     return U
 
-def calcularInvNTN(l, p, T, m, U):
-    n = len(U) - p - 2
+def calcularInvNTNyNT(l, p, T, m, U):
+    n = 4
     print(f'n: {n}')
     print(f'm: {m}')
-    N = [[0.0 for j in range(n - l - 1)] for i in range(m-1)]
+    N = np.zeros(((m-1,n - l - 1)))
+    # N = [[0.0 for j in range(n - l - 1)] for i in range(m-1)]
     print(f'Creacion N: {N}')
     for i in range(0, m -1):
       for k in range(0, n - l - 1):
@@ -73,20 +76,30 @@ def calcularInvNTN(l, p, T, m, U):
 
     N = np.array(N)
     NT = np.transpose(N)
-    NTN = np.matmul(NT, N)
+    print(f'mirame{np.shape(N),np.shape(NT)}')
+    NTN = np.dot(NT, N)
+    print(f'mirame{np.shape(NTN)}')
     #print(f'NTN: {NTN}')
     invNTN = np.linalg.inv(NTN)
     #print(f'invNTN: {invNTN}')
-    return invNTN
+    return [invNTN, NT]
+p = int(input("De el grado: "))
 
+if __name__ == "__main__":
+    plot = DraggablePlotExample()
+    dictionary = plot.get_points()
+Q = [] 
+for key, val in dictionary.items(): 
+    Q.append([key, val]) 
+ 
+Q = np.array(Q)
 
-
-Q = np.array([[0, 0], [1, 1], [2, 1.5], [3, 0],[4,2]])
+# Q = np.array([[0, 0], [1, 1], [2, 1.5], [3, 0],[4,2]])
 #Q = np.array([[0, 0], [1, 0], [3, 0], [8, 0]])
 
 i = 0
 l = 0
-p = 2
+# p = 2
 
 T = calculaT(Q)
 #print(f'T: {T}')
@@ -94,43 +107,52 @@ m = len(Q) -1
 
 # n es el indice m'as alto de los puntos de control
 # como no hay derivadas, entonces coincide con n
-n = m
+n = 4
 
 U = calcularU(i, l, T, p, m, n)
 print(len(U))
 print(f'U: {U}')
 
-invNTN = calcularInvNTN(l, p, T, m, U)
+[invNTN,NT] = calcularInvNTNyNT(l, p, T, m, U)
 # como no hay derivadas R, Q
-
+print(f'ESte es {np.shape(NT), np.shape(Q[1:-1])}')
+R = np.dot(NT,Q[1:-1])
 # Quito el primer y ultimo elementos, P_0 = Q_0, P_3 = Q_3
 # R = Q.copy()
 # R = [[0.0 for i in range(k + 1, m)] for j in range(n-l-k-1)]
 # print(f'R: {R}')
-
+print(f'R:{R}')
 # R1 = Q1, R2 = Q2
 # P0 = Q[0]
 # P1 = invNTN[0][0] * Q[1] + invNTN[0][1] * Q[2]
 # P2 = invNTN[1][0] * Q[1] + invNTN[1][1] * Q[2]
 # P3 = Q[3]
 numElemen = len(Q)
-Pi = np.dot(invNTN,Q[1:numElemen-1])
-P = np.zeros((numElemen,2), float) #Confirmar si es cierto
+print(f'mirame aqui{np.shape(invNTN),np.shape(R)}')
+Pi = np.dot(invNTN,R)
+print(f'pi:{np.shape(Pi)}')
+P = np.zeros((n+1,2), float) 
+print(f'Psize {np.shape(P)}')
 contElement = 0
 for i in range(len(P)): #implementación sin derivadas 
-  if i <= 0 or i >= len(P)-1:
+  if i == 0:
     for j in range(len(P[i])):
       P[i][j] = Q[i][j]
+  elif i == len(P)-1:
+    for j in range(len(P[i])):
+      P[-1][j] = Q[-1][j]
   else:
     for j in range(len(P[i])):
       P[i][j] = Pi[contElement][j]
     contElement += 1
 grado = p
 U = U[p:-p] #Reducción puntos repeditos
+print(f'U reducido: {U}')
+print(f'Print P final: {P}')
 (X, Y) = Boor(grado, P, U)
-
-plt.scatter(Q[:,0], Q[:,1],marker='X')
-plt.scatter(X,Y, color='purple', marker='+')
+plt.scatter(P[:,0], P[:,1],marker='o', color = 'black')
+plt.scatter(Q[:,0], Q[:,1],marker='X', color = 'green')
+plt.plot(X,Y, color='purple')
 plt.show()
 
 # # N_{1}(t_1)
