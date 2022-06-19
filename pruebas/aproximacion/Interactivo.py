@@ -61,8 +61,7 @@ def calcularU(k, l, T, p, m, n):
     
     return U
 
-def calcularInvNTNyNT(l, p, T, m, U):
-    n = 4
+def calcularInvNTNyNT(l, p, T, m, U, n):
     N = np.zeros(((m-1,n - l - 1)))
 
     for i in range(0, m -1):
@@ -77,7 +76,7 @@ def calcularInvNTNyNT(l, p, T, m, U):
 
     return [invNTN, NT]
 p = int(input("De el grado: "))
-
+n = int(input("Indice mayor de puntos de contro: "))
 if __name__ == "__main__":
     plot = DraggablePlotExample()
     dictionary = plot.get_points()
@@ -91,25 +90,23 @@ Q = np.array(Q)
 
 i = 0
 l = 0
-# p = 2
+
 
 T = calculaT(Q)
 
 m = len(Q) -1
 
 
-n = 4
-
 U = calcularU(i, l, T, p, m, n)
 
-[invNTN,NT] = calcularInvNTNyNT(l, p, T, m, U)
+[invNTN,NT] = calcularInvNTNyNT(l, p, T, m, U, n)
 
 R = np.dot(NT,Q[1:-1])
 
 
 numElemen = len(Q)
 Pi = np.dot(invNTN,R)
-P = np.zeros((n+1,2), float) 
+P = np.zeros((n+1,2), float)
 contElement = 0
 for i in range(len(P)): #implementación sin derivadas 
   if i == 0:

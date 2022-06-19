@@ -1,0 +1,1 @@
+a = input("1: Parte iteractiva\n 2:Parte 3D\n")

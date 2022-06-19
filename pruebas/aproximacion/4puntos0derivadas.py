@@ -59,50 +59,52 @@ def calcularU(k, l, T, p, m, n):
     
     return U
 
-def calcularInvNTN(l, p, T, m, U):
-    n = len(U) - p - 2
-    print(f'n: {n}')
-    print(f'm: {m}')
-    N = [[0.0 for j in range(n - l - 1)] for i in range(m-1)]
-    print(f'Creacion N: {N}')
+def calcularInvNTNyNT(l, p, T, m, U, n):
+    N = np.zeros(((m-1,n - l - 1)))
+
     for i in range(0, m -1):
       for k in range(0, n - l - 1):
         N[i][k] = basisFunction(k + 1, p, T[i + 1], U)
-        print(f'N_{i + 1}_{k + 1}: {N[i][k]}')
 
     N = np.array(N)
     NT = np.transpose(N)
-    NTN = np.matmul(NT, N)
+    NTN = np.dot(NT, N)
+ 
     invNTN = np.linalg.inv(NTN)
-    return invNTN
 
-
+    return [invNTN, NT]
+p = int(input("De el grado: "))
+n = int(input("Indice mayor de puntos de contro: "))
 
 Q = np.array([[0, 0], [1, 1], [2, 1.5], [3, 0],[4,2]])
 
 i = 0
 l = 0
-p = 2
+
 
 T = calculaT(Q)
+
 m = len(Q) -1
 
-n = m
 
 U = calcularU(i, l, T, p, m, n)
-print(len(U))
-print(f'U: {U}')
 
-invNTN = calcularInvNTN(l, p, T, m, U)
-# c
+[invNTN,NT] = calcularInvNTNyNT(l, p, T, m, U, n)
+
+R = np.dot(NT,Q[1:-1])
+
+
 numElemen = len(Q)
-Pi = np.dot(invNTN,Q[1:numElemen-1])
-P = np.zeros((numElemen,2), float) #Confirmar si es cierto
+Pi = np.dot(invNTN,R)
+P = np.zeros((n+1,2), float) #Pensar en automatizar 3 dimensiones.
 contElement = 0
 for i in range(len(P)): #implementación sin derivadas 
-  if i <= 0 or i >= len(P)-1:
+  if i == 0:
     for j in range(len(P[i])):
       P[i][j] = Q[i][j]
+  elif i == len(P)-1:
+    for j in range(len(P[i])):
+      P[-1][j] = Q[-1][j]
   else:
     for j in range(len(P[i])):
       P[i][j] = Pi[contElement][j]
@@ -110,8 +112,7 @@ for i in range(len(P)): #implementación sin derivadas
 grado = p
 U = U[p:-p] #Reducción puntos repeditos
 (X, Y) = Boor(grado, P, U)
-
-plt.scatter(Q[:,0], Q[:,1],marker='X')
-plt.scatter(X,Y, color='purple', marker='+')
+plt.scatter(P[:,0], P[:,1],marker='o', color = 'black')
+plt.scatter(Q[:,0], Q[:,1],marker='X', color = 'green')
+plt.plot(X,Y, color='purple')
 plt.show()
-
