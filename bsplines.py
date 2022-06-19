@@ -1,25 +1,25 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def basisFunction(i, p, t, T):
+def basisFunction(i, p, t, U):
   if p == 0:
-    if T[i] <= t and t < T[i+1]:
+    if U[i] <= t and t < U[i+1]:
       return 1
     return 0
 
   a = 0.0
-  den1 = T[i+p] - T[i]
+  den1 = U[i+p] - U[i]
   if den1 != 0 :
-    num1 = t - T[i]
+    num1 = t - U[i]
     a = num1 / den1
   
   b = 0.0
-  den2 = T[i+p+1]-T[i+1]
+  den2 = U[i+p+1]-U[i+1]
   if den2 != 0:
-    num2 = T[i+p+1]-t
+    num2 = U[i+p+1]-t
     b = num2 / (den2)
   
-  return a* basisFunction(i, p-1, t, T) + b* basisFunction(i + 1, p - 1, t, T)
+  return a* basisFunction(i, p-1, t, U) + b* basisFunction(i + 1, p - 1, t, U)
 
 def findSpan(n, p, u, U):
   if u > U[n]:
@@ -42,6 +42,10 @@ def findSpan(n, p, u, U):
 
     mid = int((low + high)/2)
   return mid
+
+def graficar(arreglo):
+  plt.scatter(arreglo[:,0], arreglo[:,1])
+  plt.show()
 
 def ampliarNodos(nodos, grado):
     primerElemento = nodos[0]

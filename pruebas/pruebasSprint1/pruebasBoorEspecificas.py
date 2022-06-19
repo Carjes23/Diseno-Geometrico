@@ -38,11 +38,11 @@ grado = int(input("Grado del B-Spline: "))
 # # 3 nodos
 # nodos = [0, 0.3, 1.0]
 
-# grado = 6
+#grado = 6
 # # 7 puntos
-# puntos = [[0,0], [-1,1], [1, 2], [2, 2], [3, 1.5], [4, 0], [2, -1]]
-# # 2 nodos
-# nodos = [0, 1]
+#puntos = [[0,0], [-1,1], [1, 2], [2, 2], [3, 1.5], [4, 0], [2, -1]]
+# 2 nodos
+#nodos = [0, 1]
 
 
 (xs, ys) = Boor(grado, puntos, nodos, 50)
