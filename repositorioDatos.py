@@ -4,7 +4,7 @@ class RepositorioDatos:
   def __init__(self):
     self.nombreArchivoPuntosControl = "datos/puntosControl3d.txt"
     self.nombreArchivoNodos = "datos/nodos3d.txt"
-    self.nombreArchivoPuntosQ= "datos/puntosQ.txt"
+    self.nombreArchivoPuntosQ= "datos/puntosQ3d.txt"
     self.nombreArchivoDerIn= "datos/derIniciales.txt"
     self.nombreArchivoDerFin= "datos/derFinales.txt"
     return
