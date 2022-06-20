@@ -15,17 +15,19 @@ def Boor(grado, puntos, nodos, numPuntosPorIntervalo = 20):
   #TODO: Lanzar excepcion
   minNumeroPuntosControl= grado + 1
   if minNumeroPuntosControl > numPuntosControl:
-    print(f'ERROR minimo numero de puntos de control es (grado + 1): {grado + 1}')
+    print(f'ERROR mínimo número de puntos de control es (grado + 1): {grado + 1}')
     exit()
   
   #TODO: Lanzar excepcion
   numValidoNodos = numPuntosControl + 1 - grado
   if numNodos != numValidoNodos:
-    print(f'El numero valido de nodos es: (numPuntosControl + 1 - grado): {numPuntosControl + 1 - grado}')
+    print(f'El número válido de nodos es: (numPuntosControl + 1 - grado): {numPuntosControl + 1 - grado}')
     exit()
 
   X = []
   Y = []
+  Z = []
+  a=0
   for indiceNodo in range(grado, (grado + numIntervalosRealesMenos1) + 1):
     inicial = nodosAmpliados[indiceNodo]
     final = nodosAmpliados[indiceNodo+1]
@@ -33,10 +35,18 @@ def Boor(grado, puntos, nodos, numPuntosPorIntervalo = 20):
   
     for x in dominio:
       res = calcularPuntoEnIntervalo(indiceNodo, x, nodosAmpliados, puntos, grado)
-      X.append(res[0])
-      Y.append(res[1])
-  
-  return (X, Y)
+      if len(res)>2:
+        X.append(res[0])
+        Y.append(res[1])
+        Z.append(res[2])
+        a=1
+      else:
+        X.append(res[0])
+        Y.append(res[1])
+  if a==1:
+    return (X, Y, Z)
+  else:
+    return (X, Y)
        
 def ampliarNodos(nodos, grado):
     primerElemento = nodos[0]
@@ -47,15 +57,13 @@ def ampliarNodos(nodos, grado):
     return nodos
 
 def calcularPuntoEnIntervalo(i: int, x: int, nodos, c, grado: int):
-    """Evaluates S(x).
-
-    Arguments
+    """Argumentos
     ---------
-    i: Index of knot interval that contains x.
-    x: Position.
-    nodos: Array of knot positions, needs to be padded as described above.
-    c: Array of control points.
-    grado: Degree of B-spline.
+    i: Índice del intervalo de nodos que contiene a las x.
+    x: Posición.
+    nodos: Colección (array) de las posiciones de los nodos.
+    c: Colección (array) de puntos de control.
+    grado: Grado del B-spline.
     """
     d = [c[j + i - grado] for j in range(0, grado + 1)]
 
