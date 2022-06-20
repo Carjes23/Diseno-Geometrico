@@ -42,8 +42,13 @@ def calcularU(k, l, T, p, m, n):
       sum = 0.0
       for j in range(low, high + 1):
         sum += T[j]
+      
+      try:
+        W[i] = sum / (high - low + 1)
+      except:
+        print(f'El número válido de datos escogidos en la gráfica es (Mayor índice de puntos de control + 1): {n + 1}') 
+        exit() 
 
-      W[i] = sum / (high - low + 1)  
       low = high + 1
 
     iS = 1 - k
@@ -77,8 +82,12 @@ def calcularInvNTNyNT(l, p, T, m, U, n):
 
     return [invNTN, NT]
 
+#TODO
+#REVISAR QUE PASA CUANDO EL GRADO ES IGUAL AL MAYOR INDICE DE PC PUESTO QUE SALE LA GRAFICA
+#El problema es que si es menor la advertencia dice que se necesitan pc+1, y no es verdad
+#Este código crea un PC de más
 p = int(input("Dé el grado del B-Spline: "))
-n = int(input("Índice mayor de puntos de control: "))
+n = int(input("Mayor índice de puntos de control: "))
 
 if __name__ == "__main__":
     plot = DraggablePlotExample()
