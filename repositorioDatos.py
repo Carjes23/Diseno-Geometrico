@@ -3,7 +3,7 @@ import csv
 class RepositorioDatos:
   def __init__(self):
     self.nombreArchivoPuntosControl = "datos/puntosControl3d.txt"
-    self.nombreArchivoNodos = "datos/nodos1.txt"
+    self.nombreArchivoNodos = "datos/nodos3d.txt"
     return
 
   def getNombreArchivoPuntosControl(self):
