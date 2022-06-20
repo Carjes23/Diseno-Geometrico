@@ -3,7 +3,9 @@ from matplotlib import pyplot as plt
 import numpy as np
 from bsplines import basisFunction
 from boor import Boor
-from draggable_plot import * 
+from draggable_plot import *
+from repositorioDatos import RepositorioDatos
+
 def calculaT(Q):
   m = len(Q) - 1
   T = [0.0 for i in range(m+1)]
@@ -73,10 +75,13 @@ def calcularInvNTNyNT(l, p, T, m, U, n):
     invNTN = np.linalg.inv(NTN)
 
     return [invNTN, NT]
-p = int(input("De el grado: "))
-n = int(input("Indice mayor de puntos de contro: "))
+p = int(input("Dé el grado del B-spline: "))
+n = int(input("Mayor índice de puntos de control: "))
 
-Q = np.array([[0, 0], [1, 1], [2, 1.5], [3, 0],[4,2]])
+#Q = np.array([[0, 0], [1, 1], [2, 1.5], [3, 0],[4,2]])
+repo = RepositorioDatos()
+Q = repo.obtenerPuntosQ()
+Q= np.array(Q)
 
 i = 0
 l = 0
@@ -110,9 +115,11 @@ for i in range(len(P)): #implementación sin derivadas
       P[i][j] = Pi[contElement][j]
     contElement += 1
 grado = p
-U = U[p:-p] #Reducción puntos repeditos
+U = U[p:-p] #Reducción puntos repetidos
 (X, Y) = Boor(grado, P, U)
-plt.scatter(P[:,0], P[:,1],marker='o', color = 'black')
-plt.scatter(Q[:,0], Q[:,1],marker='X', color = 'green')
-plt.plot(X,Y, color='purple')
+plt.scatter(P[:,0], P[:,1],marker='o', color = 'black', label="Puntos de control") 
+plt.scatter(Q[:,0], Q[:,1],marker='X', color = 'green', label="Datos Q") 
+plt.plot(X,Y, color='purple', label="Curva B-spline") 
+plt.legend(loc="best")
+plt.title("Curva B-spline")
 plt.show()

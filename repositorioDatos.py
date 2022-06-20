@@ -4,14 +4,18 @@ class RepositorioDatos:
   def __init__(self):
     self.nombreArchivoPuntosControl = "datos/puntosControl3d.txt"
     self.nombreArchivoNodos = "datos/nodos3d.txt"
+    self.nombreArchivoPuntosQ= "datos/puntosQ.txt"
     return
 
   def getNombreArchivoPuntosControl(self):
     return self.nombreArchivoPuntosControl
-  
+
   def getNombreArchivoNodos(self):
     return self.nombreArchivoNodos
   
+  def getNombreArchivoPuntosQ(self):
+    return self.nombreArchivoPuntosQ
+
   def obtenerPuntosControl(self):
     try:
       with open(self.nombreArchivoPuntosControl, 'r') as archivo:
@@ -32,6 +36,16 @@ class RepositorioDatos:
       exit()
     return knots
 
+  def obtenerPuntosQ(self):
+    try:
+      with open(self.nombreArchivoPuntosQ, 'r') as archivo:
+        lineas = csv.reader(archivo)
+        puntosQ = self.convertirLineasAPuntosQ(lineas)
+    except FileNotFoundError:
+      print("No se encuentra el archivo con los puntos Q")
+      exit()
+    return puntosQ
+  
   def convertirLineasALista(self, lineas):
     lista = []
     for linea in lineas:
@@ -52,7 +66,7 @@ class RepositorioDatos:
           z = float(linea[2])
           puntos.append([x, y, z])
         except IndexError:
-          print("No se encuentran solo dos puntos de control por línea.")
+          print("No se encuentran solo tres puntos de control por línea.")
           exit()
         except ValueError:
           print("Los puntos de control deben ser de caracter numérico.")
@@ -69,3 +83,31 @@ class RepositorioDatos:
           print("Los puntos de control deben ser de caracter numérico.")
           exit()
     return puntos
+ 
+  def convertirLineasAPuntosQ(self, lineas):
+    puntosQ = []
+    for linea in lineas:
+      if len(linea)>2:
+        try:
+          x = float(linea[0])
+          y = float(linea[1])
+          z = float(linea[2])
+          puntosQ.append([x, y, z])
+        except IndexError:
+          print("No se encuentran solo tres puntos de control por línea.")
+          exit()
+        except ValueError:
+          print("Los puntos de control deben ser de caracter numérico.")
+          exit()
+      else:
+        try:
+          x = float(linea[0])
+          y = float(linea[1])
+          puntosQ.append([x, y])
+        except IndexError:
+          print("No se encuentran solo dos puntos de control por línea.")
+          exit()
+        except ValueError:
+          print("Los puntos de control deben ser de caracter numérico.")
+          exit()
+    return puntosQ
