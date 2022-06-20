@@ -75,6 +75,32 @@ def calcularInvNTNyNT(l, p, T, m, U, n):
     invNTN = np.linalg.inv(NTN)
 
     return [invNTN, NT]
+
+
+
+# def calcularPuntDer(k,l, T, di, df, p, Q, U):
+#   p0= Q[0]
+#   pm= Q[-1]
+#   p1= (1/basisFunction(1, p, T[0], U))*(di[0]-basisFunction(j, p, T[0], U)*Q[0])
+#   Pderi=[p0, p1]
+#   Pderf=[pm]
+#   for i in range(1, k):
+#     for j in range(0, i-1):
+#       suma= basisFunction(j, p, T[0], U)*Pderi[j]
+      
+#     Pderi.append((1/basisFunction(k + 1, p, T[0], U))*(di[i]-suma))
+
+
+#   for m in range(1, l):
+#     for n in range(0,m-1):
+#             suma= basisFunction(n, p, T[-1], U)*Pderf[n]
+      
+#     Pderf.append((1/basisFunction(k + 1, p, T[-1], U))*(df[m]-suma))
+
+
+
+
+
 p = int(input("Dé el grado del B-spline: "))
 n = int(input("Mayor índice de puntos de control: "))
 
@@ -83,18 +109,24 @@ repo = RepositorioDatos()
 Q = repo.obtenerPuntosQ()
 Q= np.array(Q)
 
-i = 0
-l = 0
+
 
 
 T = calculaT(Q)
 
 m = len(Q) -1
-
+i=0
+l=0
 
 U = calcularU(i, l, T, p, m, n)
 
 [invNTN,NT] = calcularInvNTNyNT(l, p, T, m, U, n)
+
+# di=[1,2]
+# df=[2,3]
+# k=2
+# l=2
+# pcderiv=calcularPuntDer(k,l, T, di, df, p, Q, U)
 
 R = np.dot(NT,Q[1:-1])
 
