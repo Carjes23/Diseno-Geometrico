@@ -1,65 +1,9 @@
-from math import floor
 from matplotlib import pyplot as plt
 import numpy as np
-from bsplines import basisFunction #, derbasisFunction
+from bsplines import *
 from boor import Boor
 from draggable_plot import *
 from repositorioDatos import RepositorioDatos
-
-def calculaT(Q): #Parametrización de los datos Q ingresados
-  m = len(Q) - 1
-  T = [0.0 for i in range(m+1)]
-
-  d = 0.0
-  for r in range(1, m + 1):
-    diff = Q[r] - Q[r-1]
-    d += np.sqrt(diff.dot(diff))
-
-
-  for r in range(1, m+1):
-    diff = Q[r] - Q[r-1]
-    T[r] = T[r-1] +  np.sqrt(diff.dot(diff))/d
-
-  return T
-
-def calcularU(k, l, T, p, m, n): #Cálculo del vector de nodos
-    U = [0.0 for i in range(0, (n + p + 1) + 1)]
-    for i in range(0, p + 1):
-      U[i] = T[0]
-      U[n + i + 1] = T[m]
-
-    nc = n - k - l
-    inc = (m + 1)/(nc + 1)
-    low = high = 0
-    d = -1
-    W = [0.0 for i in range(0, nc + 1)]
-
-    for i in range(0, nc + 1):
-      d = d + inc
-      high = floor(d + 0.5)
-  
-      sum = 0.0
-      for j in range(low, high + 1):
-        sum += T[j]
-
-      W[i] = sum / (high - low + 1)  
-      low = high + 1
-
-    iS = 1 - k
-    ie = nc - p  + l
-    r = p
-    for i in range(iS, ie + 1):
-      js = max(0, i)
-      je = min(nc, i + p - 1)
-      r += 1
-
-      sum = 0.0
-      for j in range(js, je + 1):
-        sum += W[j]
-  
-      U[r] = sum/(je - js + 1)
-    
-    return U
 
 def calcularInvNTNyNT(l, p, T, m, U, n): #Arreglar si hay k
     N = np.zeros(((m-1,n - l - 1)))
@@ -105,7 +49,6 @@ def calcularInvNTNyNT(l, p, T, m, U, n): #Arreglar si hay k
 p = int(input("Dé el grado del B-spline: "))
 n = int(input("Mayor índice de puntos de control: "))
 
-#Q = np.array([[0, 0], [1, 1], [2, 1.5], [3, 0],[4,2]])
 repo = RepositorioDatos()
 Q = repo.obtenerPuntosQ()
 #di=repo.obtenerDerIn()
@@ -132,12 +75,12 @@ R = np.dot(NT,Q[1:-1])
 numElemen = len(Q)
 Pi = np.dot(invNTN,R)
 if len(Q[0])==2:
-  P = np.zeros((n+1,2), float) #Pensar en automatizar 3 dimensiones.
+  P = np.zeros((n+1,2), float) #Inicialización del vector de Puntos de Control
 else:
   P = np.zeros((n+1,3), float)
 
 contElement = 0
-for i in range(len(P)): #implementación sin derivadas 
+for i in range(len(P)): #Implementación sin derivadas 
   if i == 0:
     for j in range(len(P[i])):
       P[i][j] = Q[i][j]

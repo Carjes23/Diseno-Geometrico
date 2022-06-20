@@ -1,5 +1,62 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from math import floor
+
+def calculaT(Q): #Parametrización de los datos Q ingresados
+  m = len(Q) - 1
+  T = [0.0 for i in range(m+1)]
+
+  d = 0.0
+  for r in range(1, m + 1):
+    diff = Q[r] - Q[r-1]
+    d += np.sqrt(diff.dot(diff))
+
+
+  for r in range(1, m+1):
+    diff = Q[r] - Q[r-1]
+    T[r] = T[r-1] +  np.sqrt(diff.dot(diff))/d
+
+  return T
+
+def calcularU(k, l, T, p, m, n): #Cálculo del vector de nodos
+    U = [0.0 for i in range(0, (n + p + 1) + 1)]
+    for i in range(0, p + 1): #Multiplicidad según el grado en el primer y último nodo
+      U[i] = T[0]
+      U[n + i + 1] = T[m]
+
+    nc = n - k - l
+    inc = (m + 1)/(nc + 1)
+    low = high = 0
+    d = -1
+    W = [0.0 for i in range(0, nc + 1)]
+
+    for i in range(0, nc + 1):
+      d = d + inc
+      high = floor(d + 0.5)
+  
+      sum = 0.0
+      for j in range(low, high + 1):
+        sum += T[j]
+
+      W[i] = sum / (high - low + 1)  
+      low = high + 1
+
+    iS = 1 - k
+    ie = nc - p  + l
+    r = p
+    for i in range(iS, ie + 1):
+      js = max(0, i)
+      je = min(nc, i + p - 1)
+      r += 1
+
+      sum = 0.0
+      for j in range(js, je + 1):
+        sum += W[j]
+  
+      U[r] = sum/(je - js + 1)
+    
+    return U
+
 
 def basisFunction(i, p, t, U):
   if p == 0:
