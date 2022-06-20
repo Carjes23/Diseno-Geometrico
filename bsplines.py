@@ -21,6 +21,9 @@ def basisFunction(i, p, t, U):
   
   return a* basisFunction(i, p-1, t, U) + b* basisFunction(i + 1, p - 1, t, U)
 
+#def derbasisFunction():
+
+
 def findSpan(n, p, u, U):
   if u > U[n]:
     print(f'ERROR, intenta buscar un elemento "{u}" que es mayor a toda la lista de nodos')

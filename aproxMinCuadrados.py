@@ -1,11 +1,10 @@
 from math import floor
 from matplotlib import pyplot as plt
 import numpy as np
-from bsplines import basisFunction
+from bsplines import basisFunction, derbasisFunction
 from boor import Boor
 from draggable_plot import *
 from repositorioDatos import RepositorioDatos
-import csv
 
 def calculaT(Q): #Parametrización de los datos Q ingresados
   m = len(Q) - 1
@@ -62,7 +61,7 @@ def calcularU(k, l, T, p, m, n): #Cálculo del vector de nodos
     
     return U
 
-def calcularInvNTNyNT(l, p, T, m, U, n):
+def calcularInvNTNyNT(l, p, T, m, U, n): #Arreglar si hay k
     N = np.zeros(((m-1,n - l - 1)))
 
     for i in range(0, m -1):
@@ -100,11 +99,11 @@ def calcularPuntDer(k,l, T, di, df, p, Q, U):
     Pderf.append((1/derbasisFunction(m, p, T[-1], U))*(df[m]-sumafi))
 
   Pderf.reverse()
+  return [Pderi, Pderf]
 
 
 p = int(input("Dé el grado del B-spline: "))
 n = int(input("Mayor índice de puntos de control: "))
-
 
 #Q = np.array([[0, 0], [1, 1], [2, 1.5], [3, 0],[4,2]])
 repo = RepositorioDatos()
@@ -125,7 +124,7 @@ U = calcularU(k, l, T, p, m, n)
 
 [invNTN,NT] = calcularInvNTNyNT(l, p, T, m, U, n)
 
-Pderiv=calcularPuntDer(k,l, T, di, df, p, Q, U)
+[PderIn, PderFin] =calcularPuntDer(k, l, T, di, df, p, Q, U)
 
 R = np.dot(NT,Q[1:-1])
 
