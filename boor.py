@@ -15,13 +15,13 @@ def Boor(grado, puntos, nodos, numPuntosPorIntervalo = 20):
   #TODO: Lanzar excepcion
   minNumeroPuntosControl= grado + 1
   if minNumeroPuntosControl > numPuntosControl:
-    print(f'ERROR mínimo número de puntos de control es (grado + 1): {grado + 1}')
+    print(f'ERROR mínimo número de puntos de control es (grado + 1)= {grado + 1}')
     exit()
   
   #TODO: Lanzar excepcion
   numValidoNodos = numPuntosControl + 1 - grado
-  if numNodos != numValidoNodos:
-    print(f'El número válido de nodos es: (numPuntosControl + 1 - grado): {numPuntosControl + 1 - grado}')
+  if numNodos > numValidoNodos:
+    print(f'El número válido de nodos es igual o menor a (numPuntosControl + 1 - grado)= {numPuntosControl + 1 - grado} o menor')
     exit()
 
   X = []
