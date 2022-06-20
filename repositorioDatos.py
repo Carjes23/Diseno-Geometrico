@@ -2,9 +2,11 @@ import csv
 
 class RepositorioDatos:
   def __init__(self):
-    self.nombreArchivoPuntosControl = "datos/ochopuntosControl.txt"
-    self.nombreArchivoNodos = "datos/cinconodos.txt"
+    self.nombreArchivoPuntosControl = "datos/puntosControl3d.txt"
+    self.nombreArchivoNodos = "datos/nodos3d.txt"
     self.nombreArchivoPuntosQ= "datos/puntosQ.txt"
+    self.nombreArchivoDerIn= "datos/derIniciales.txt"
+    self.nombreArchivoDerFin= "datos/derFinales.txt"
     return
 
   def getNombreArchivoPuntosControl(self):
@@ -15,6 +17,12 @@ class RepositorioDatos:
   
   def getNombreArchivoPuntosQ(self):
     return self.nombreArchivoPuntosQ
+
+  def getNombreArchivoDerIn(self):
+    return self.nombreArchivoDerIn
+  
+  def getNombreArchivoDerFin(self):
+    return self.nombreArchivoDerFin
 
   def obtenerPuntosControl(self):
     try:
@@ -46,6 +54,26 @@ class RepositorioDatos:
       exit()
     return puntosQ
   
+  def obtenerDerIn(self):
+    try:
+      with open(self.nombreArchivoDerIn, 'r') as archivo:
+        lineas = csv.reader(archivo)
+        derIn = self.convertirLineasAPuntosDerIn(lineas)
+    except FileNotFoundError:
+      print("No se encuentra el archivo con las derivadas iniciales")
+      exit()
+    return derIn
+
+  def obtenerDerFin(self):
+    try:
+      with open(self.nombreArchivoDerFin, 'r') as archivo:
+        lineas = csv.reader(archivo)
+        derFin = self.convertirLineasAPuntosDerFin(lineas)
+    except FileNotFoundError:
+      print("No se encuentra el archivo con las derivadas finales")
+      exit()
+    return derFin
+
   def convertirLineasALista(self, lineas):
     lista = []
     for linea in lineas:
@@ -66,7 +94,7 @@ class RepositorioDatos:
           z = float(linea[2])
           puntos.append([x, y, z])
         except IndexError:
-          print("No se encuentran solo tres puntos de control por línea.")
+          print("No se encuentran solo tres coordenadas de puntos de control por línea.")
           exit()
         except ValueError:
           print("Los puntos de control deben ser de caracter numérico.")
@@ -77,7 +105,7 @@ class RepositorioDatos:
           y = float(linea[1])
           puntos.append([x, y])
         except IndexError:
-          print("No se encuentran solo dos puntos de control por línea.")
+          print("No se encuentran solo dos coordenadas de puntos de control por línea.")
           exit()
         except ValueError:
           print("Los puntos de control deben ser de caracter numérico.")
@@ -94,10 +122,10 @@ class RepositorioDatos:
           z = float(linea[2])
           puntosQ.append([x, y, z])
         except IndexError:
-          print("No se encuentran solo tres puntos de control por línea.")
+          print("No se encuentran solo tres coordenadas de puntos Q por línea.")
           exit()
         except ValueError:
-          print("Los puntos de control deben ser de caracter numérico.")
+          print("Los puntos Q deben ser de caracter numérico.")
           exit()
       else:
         try:
@@ -105,9 +133,65 @@ class RepositorioDatos:
           y = float(linea[1])
           puntosQ.append([x, y])
         except IndexError:
-          print("No se encuentran solo dos puntos de control por línea.")
+          print("No se encuentran solo dos coordenadas de puntos Q por línea.")
           exit()
         except ValueError:
-          print("Los puntos de control deben ser de caracter numérico.")
+          print("Los puntos Q deben ser de caracter numérico.")
           exit()
     return puntosQ
+
+  def convertirLineasAPuntosDerIn(self, lineas):
+    derIn = []
+    for linea in lineas:
+      if len(linea)>2:
+        try:
+          x = float(linea[0])
+          y = float(linea[1])
+          z = float(linea[2])
+          derIn.append([x, y, z])
+        except IndexError:
+          print("No se encuentran solo tres coordenadas de derivada por línea.")
+          exit()
+        except ValueError:
+          print("Las derivadas deben ser de caracter numérico.")
+          exit()
+      else:
+        try:
+          x = float(linea[0])
+          y = float(linea[1])
+          derIn.append([x, y])
+        except IndexError:
+          print("No se encuentran solo dos coordenadas de derivada por línea.")
+          exit()
+        except ValueError:
+          print("Las derivadas deben ser de caracter numérico.")
+          exit()
+    return derIn
+
+  def convertirLineasAPuntosDerFin(self, lineas):
+    derFin = []
+    for linea in lineas:
+      if len(linea)>2:
+        try:
+          x = float(linea[0])
+          y = float(linea[1])
+          z = float(linea[2])
+          derFin.append([x, y, z])
+        except IndexError:
+          print("No se encuentran solo tres coordenadas de derivada por línea.")
+          exit()
+        except ValueError:
+          print("Las derivadas deben ser de caracter numérico.")
+          exit()
+      else:
+        try:
+          x = float(linea[0])
+          y = float(linea[1])
+          derFin.append([x, y])
+        except IndexError:
+          print("No se encuentran solo dos coordenadas de derivada por línea.")
+          exit()
+        except ValueError:
+          print("Las derivadas deben ser de caracter numérico.")
+          exit()
+    return derFin

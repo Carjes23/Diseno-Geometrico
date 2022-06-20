@@ -5,8 +5,9 @@ from bsplines import basisFunction
 from boor import Boor
 from draggable_plot import *
 from repositorioDatos import RepositorioDatos
+import csv
 
-def calculaT(Q):
+def calculaT(Q): #Parametrización de los datos Q ingresados
   m = len(Q) - 1
   T = [0.0 for i in range(m+1)]
 
@@ -22,7 +23,7 @@ def calculaT(Q):
 
   return T
 
-def calcularU(k, l, T, p, m, n):
+def calcularU(k, l, T, p, m, n): #Cálculo del vector de nodos
     U = [0.0 for i in range(0, (n + p + 1) + 1)]
     for i in range(0, p + 1):
       U[i] = T[0]
@@ -76,60 +77,57 @@ def calcularInvNTNyNT(l, p, T, m, U, n):
 
     return [invNTN, NT]
 
-
-
-# def calcularPuntDer(k,l, T, di, df, p, Q, U):
-#   p0= Q[0]
-#   pm= Q[-1]
-#   p1= (1/basisFunction(1, p, T[0], U))*(di[0]-basisFunction(j, p, T[0], U)*Q[0])
-#   Pderi=[p0, p1]
-#   Pderf=[pm]
-#   for i in range(1, k):
-#     for j in range(0, i-1):
-#       suma= basisFunction(j, p, T[0], U)*Pderi[j]
+def calcularPuntDer(k,l, T, di, df, p, Q, U):
+  p0= Q[0]
+  pm= Q[-1]
+  #p1= (1/derbasisFunction(1, p, T[0], U))*(di[0]-derbasisFunction(0, p, T[0], U)*Q[0])
+  Pderi=[p0]
+  Pderf=[pm]
+  for i in range(1, k):
+    sumain= np.array([0,0])
+    for j in range(0, i-1):
+      sumain+= derbasisFunction(j, p, T[0], U)*Pderi[j]
       
-#     Pderi.append((1/basisFunction(k + 1, p, T[0], U))*(di[i]-suma))
+    print(sumain) 
+    Pderi.append((1/derbasisFunction(i, p, T[0], U))*(di[i]-sumain))
 
 
-#   for m in range(1, l):
-#     for n in range(0,m-1):
-#             suma= basisFunction(n, p, T[-1], U)*Pderf[n]
+  for m in range(1, l):
+    sumafi= np.array([0,0])
+    for n in range(0,m-1):
+      sumafi+= derbasisFunction(n, p, T[-1], U)*Pderf[n]
       
-#     Pderf.append((1/basisFunction(k + 1, p, T[-1], U))*(df[m]-suma))
+    Pderf.append((1/derbasisFunction(m, p, T[-1], U))*(df[m]-sumafi))
 
-
-
+  Pderf.reverse()
 
 
 p = int(input("Dé el grado del B-spline: "))
 n = int(input("Mayor índice de puntos de control: "))
 
+
 #Q = np.array([[0, 0], [1, 1], [2, 1.5], [3, 0],[4,2]])
 repo = RepositorioDatos()
 Q = repo.obtenerPuntosQ()
+di=repo.obtenerDerIn()
+df=repo.obtenerDerFin()
 Q= np.array(Q)
-
-
-
+di= np.array(di)
+df= np.array(df)
 
 T = calculaT(Q)
 
 m = len(Q) -1
-i=0
-l=0
+k=len(di)
+l=len(df)
 
-U = calcularU(i, l, T, p, m, n)
+U = calcularU(k, l, T, p, m, n)
 
 [invNTN,NT] = calcularInvNTNyNT(l, p, T, m, U, n)
 
-# di=[1,2]
-# df=[2,3]
-# k=2
-# l=2
-# pcderiv=calcularPuntDer(k,l, T, di, df, p, Q, U)
+Pderiv=calcularPuntDer(k,l, T, di, df, p, Q, U)
 
 R = np.dot(NT,Q[1:-1])
-
 
 numElemen = len(Q)
 Pi = np.dot(invNTN,R)
