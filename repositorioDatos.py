@@ -2,8 +2,8 @@ import csv
 
 class RepositorioDatos:
   def __init__(self):
-    self.nombreArchivoPuntosControl = "datos/datosPrueba/puntosControl3d.txt"
-    self.nombreArchivoNodos = "datos/datosPrueba/nodos3d.txt"
+    self.nombreArchivoPuntosControl = "datos/datosPrueba/ochopuntosControl.txt"
+    self.nombreArchivoNodos = "datos/datosPrueba/cinconodos.txt"
     self.nombreArchivoPuntosQ= "datos/datosPrueba/helice.txt"
     self.nombreArchivoDerIn= "datos/datosPrueba/derIniciales.txt"
     self.nombreArchivoDerFin= "datos/datosPrueba/derFinales.txt"
