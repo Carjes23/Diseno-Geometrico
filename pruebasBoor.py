@@ -27,7 +27,8 @@ else:
     xs = np.array([xs])
     ys = np.array([ys])
     zs = np.array([zs])
-    ax1.plot_wireframe(xs, ys, zs) #Curva B-spline en tres dimensiones
-    plt.plot(cxs, cys, cys, "s")
-    plt.plot(cxs, cys, czs, color = "black") #Polinomio de control
+    ax1.plot_wireframe(xs, ys, zs, label="Curva B-spline") #Curva B-spline en tres dimensiones
+    plt.plot(cxs, cys, cys, "s", label="Puntos de control")
+    plt.plot(cxs, cys, czs, color = "black", label="Polinomio de control") #Polinomio de control
+    plt.legend()
     plt.show()

@@ -139,12 +139,3 @@ def ampliarNodos(nodos, grado):
         nodos.insert(0,primerElemento)
         nodos.append(ultimoElemento)
     return nodos
-
-# TODO: Problemas al evaluar en el ultimo punto: u = 1.0
-# U = [0, 0, 0, 1, 1, 1]
-# p = 0
-# n = len(U) - p - 1
-
-# i = findSpan(n, p, 1.0, U)
-# N = basisFunction(i, p, 1.0, U )
-# print(f'N_{i}{p}({1.0}): {N}')

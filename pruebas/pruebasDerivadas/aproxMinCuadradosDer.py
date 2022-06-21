@@ -5,12 +5,12 @@ from boor import Boor
 from draggable_plot import *
 from repositorioDatos import RepositorioDatos
 
-def calcularInvNTNyNT(l, p, T, m, U, n): #Arreglar si hay k
+def calcularInvNTNyNT(l, p, T, m, U, n): 
     N = np.zeros(((m-1,n - l - 1)))
 
     for i in range(0, m -1):
-      for k in range(0, n - l - 1):
-        N[i][k] = basisFunction(k + 1, p, T[i + 1], U)
+      for j in range(0, n - l - 1):
+        N[i][j] = basisFunction(j + 1, p, T[i + 1], U)
 
     N = np.array(N)
     NT = np.transpose(N)
@@ -20,15 +20,47 @@ def calcularInvNTNyNT(l, p, T, m, U, n): #Arreglar si hay k
 
     return [invNTN, NT]
 
+def calcularPuntDer(k,l, T, di, df, p, Q, U):
+  Pderi=[np.array(Q[0])]
+  Pderf=[np.array(Q[-1])]
+  for i in range(1, k+1):
+    sumain= np.zeros((1,2), float)
+    for j in range(0, i-1):
+      sumain+= derivada(j, p, i, T[0], U)*Pderi[j]
+
+    print(i, (1/derivada(i, p, i, T[0], U))*(di[i]-sumain))
+    Pderi.append((1/derivada(i, p, i, T[0], U))*(di[i]-sumain))
+
+  for m in range(1, l+1):
+    sumafi= np.zeros((1,2), float)
+    for n in range(0,m-1):
+      sumafi+= derivada(n, p, m, T[-1], U)*Pderf[n]
+
+    try:
+      a=(1/derivada(m, p, m, T[-1], U))*(df[m]-sumafi)
+      if a[0]== float('inf'):
+        Pderf.append(Pderf[0])
+    except:
+      Pderf.append(Pderf[0])
+
+  Pderf=np.flip(Pderf)
+  return [Pderi, Pderf]
+
 
 p = int(input("Dé el grado del B-spline: "))
-n = int(input("Mayor índice de puntos de control: "))
-
+#n = int(input("Mayor índice de puntos de control: "))
+n=30
 repo = RepositorioDatos()
 Q = repo.obtenerPuntosQ()
+di=repo.obtenerDerIn()
+df=repo.obtenerDerFin()
 Q= np.array(Q)
-k=0
-l=0
+di= np.array(di)
+df= np.array(df)
+k=len(di)
+l=len(df)
+#k=0
+#l=0
 T = calculaT(Q)
 
 m = len(Q) -1
@@ -36,6 +68,8 @@ m = len(Q) -1
 U = calcularU(k, l, T, p, m, n)
 
 [invNTN,NT] = calcularInvNTNyNT(l, p, T, m, U, n)
+
+[PderIn, PderFin] =calcularPuntDer(k, l, T, di, df, p, Q, U)
 
 R = np.dot(NT,Q[1:-1])
 
@@ -47,19 +81,22 @@ else:
   P = np.zeros((n+1,3), float)
 
 
-contElement = 0
 for i in range(len(P)): #Implementación sin derivadas 
-  if i == 0:
+  if i <= k:
     for j in range(len(P[i])):
-      P[i][j] = Q[i][j]
-  elif i == len(P)-1:
+      #print(PderIn[i][j])
+      P[i][j] = [i][j]
+      #P[i][j] = PderIn[i][j]
+  elif i < n-l:
     for j in range(len(P[i])):
-      P[-1][j] = Q[-1][j]
+      P[i][j] = Pi[i-(k+1)][j]
   else:
     for j in range(len(P[i])):
-      P[i][j] = Pi[contElement][j]
-    contElement += 1
+      P[i][j] = PderFin[i-(k+1)-len(Pi)][j]
 
+
+
+#print(P)
 grado = p
 U = U[p:-p] #Reducción puntos repetidos
 
