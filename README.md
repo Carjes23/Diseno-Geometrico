@@ -4,6 +4,11 @@ Proyecto final para Programación Científica.
 Implementación del algoritmo de De Boor para evaluar curvas B-Spline. 
 
 En el repositorio se pueden encontrar diferentes archivos, unos correspondientes al código del programa (módulos), y otros referentes a los datos de entrada para la ejecución de ellos. Para el correcto funcionamiento del programa realizado, es necesario que el usuario se dirija a la carpeta "datos" y en el archivo "nodos.txt" ingrese los nodos con los que se desee trabajar, uno por línea. El usuario también debe proveer un archivo de texto "puntosControl.txt" se deben escribir los puntos de control para la curva en el formato
+ 
+
+"puntosQ.txt"
+"derIniciales.txt"
+"derFinales.txt"
 
 x1, y1
 x2, y2

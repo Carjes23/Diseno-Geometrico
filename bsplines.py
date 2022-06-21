@@ -24,8 +24,12 @@ def calcularU(k, l, T, p, m, n): #Cálculo del vector de nodos
       U[i] = T[0]
       U[n + i + 1] = T[m]
 
-    nc = n - k - l
-    inc = (m + 1)/(nc + 1)
+    nc = n - k - l 
+    try:
+      inc = (m + 1)/(nc + 1)
+    except:
+      print("Número de puntos de control menor a total de derivadas")
+      exit()
     low = high = 0
     d = -1
     W = [0.0 for i in range(0, nc + 1)]
@@ -38,7 +42,11 @@ def calcularU(k, l, T, p, m, n): #Cálculo del vector de nodos
       for j in range(low, high + 1):
         sum += T[j]
 
-      W[i] = sum / (high - low + 1)  
+      try:
+        W[i] = sum / (high - low + 1)  
+      except:
+        print("Número inválido de puntos escogidos interactivamente para el grado dado")
+        exit()
       low = high + 1
 
     iS = 1 - k
@@ -78,8 +86,25 @@ def basisFunction(i, p, t, U):
   
   return a* basisFunction(i, p-1, t, U) + b* basisFunction(i + 1, p - 1, t, U)
 
-#def derbasisFunction():
+def derivada(i, p, j, u, U):
+  if j == 0:
+    aux = basisFunction(i, p, u, U)
+    return aux
 
+  den1 = U[i+p] - U[i]
+  a1 = 0.0
+  if den1 != 0:
+    num1 = derivada(i, p-1, j-1, u, U)
+    a1 = num1/den1
+  
+  den2 = U[i+p+1] - U[i+1]
+  a2 = 0.0
+  if den2 != 0:
+    num2 = derivada(i+1, p-1, j-1, u, U)
+    a2 = num2/den2
+
+  res = p*(a1 - a2)
+  return res
 
 def findSpan(n, p, u, U):
   if u > U[n]:

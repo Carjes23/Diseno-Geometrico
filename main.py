@@ -10,7 +10,7 @@ while ver==0:
         print("Por favor escoger una opción por medio de un valor numérico entre 1, 2 y 3\n")
 
 if a==1:
-    os.system('python pruebasBoorConPCyNDados.py')
+    os.system('python pruebasBoor.py')
 elif a==2:
     os.system('python aproxMinCuadrados.py')
 elif a==3:

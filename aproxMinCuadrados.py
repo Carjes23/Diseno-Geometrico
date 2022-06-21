@@ -20,44 +20,45 @@ def calcularInvNTNyNT(l, p, T, m, U, n): #Arreglar si hay k
 
     return [invNTN, NT]
 
-# def calcularPuntDer(k,l, T, di, df, p, Q, U):
-#   p0= Q[0]
-#   pm= Q[-1]
-#   #p1= (1/derbasisFunction(1, p, T[0], U))*(di[0]-derbasisFunction(0, p, T[0], U)*Q[0])
-#   Pderi=[p0]
-#   Pderf=[pm]
-#   for i in range(1, k):
-#     sumain= np.array([0,0])
-#     for j in range(0, i-1):
-#       sumain+= derbasisFunction(j, p, T[0], U)*Pderi[j]
-      
-#     print(sumain) 
-#     Pderi.append((1/derbasisFunction(i, p, T[0], U))*(di[i]-sumain))
+def calcularPuntDer(k,l, T, di, df, p, Q, U):
+  Pderi=np.array(Q[0])
+  Pderf=np.array(Q[-1])
+  for i in range(1, k):
+    sumain= np.zeros((1,2), float)
+    for j in range(0, i-1):
+      sumain+= derivada(j, p, i, T[0], U)*Pderi[j]
 
+    print((1/derivada(i, p, i, T[0], U))*(di[i]-sumain))
+    Pderi.append((1/derivada(i, p, i, T[0], U))*(di[i]-sumain))
 
-  # for m in range(1, l):
-  #   sumafi= np.array([0,0])
-  #   for n in range(0,m-1):
-  #     sumafi+= derbasisFunction(n, p, T[-1], U)*Pderf[n]
-      
-  #   Pderf.append((1/derbasisFunction(m, p, T[-1], U))*(df[m]-sumafi))
+  for m in range(1, l):
+    sumafi= np.zeros((1,2), float)
+    for n in range(0,m-1):
+      sumafi+= derivada(n, p, m, T[-1], U)*Pderf[n]
 
-  # Pderf.reverse()
-  # return [Pderi, Pderf]
+    try:
+      a=(1/derivada(m, p, m, T[-1], U))*(df[m]-sumafi)
+      if a[0]== float('inf'):
+        Pderf.append(Pderf[0])
+    except:
+      Pderf.append(Pderf[0])
+
+  Pderf.reverse()
+  return [Pderi, Pderf]
 
 
 p = int(input("Dé el grado del B-spline: "))
-n = int(input("Mayor índice de puntos de control: "))
-
+#n = int(input("Mayor índice de puntos de control: "))
+n=30
 repo = RepositorioDatos()
 Q = repo.obtenerPuntosQ()
-#di=repo.obtenerDerIn()
-#df=repo.obtenerDerFin()
+di=repo.obtenerDerIn()
+df=repo.obtenerDerFin()
 Q= np.array(Q)
-# di= np.array(di)
-# df= np.array(df)
-# k=len(di)
-# l=len(df)
+di= np.array(di)
+df= np.array(df)
+#k=len(di)
+#l=len(df)
 k=0
 l=0
 T = calculaT(Q)
@@ -68,7 +69,7 @@ U = calcularU(k, l, T, p, m, n)
 
 [invNTN,NT] = calcularInvNTNyNT(l, p, T, m, U, n)
 
-#[PderIn, PderFin] =calcularPuntDer(k, l, T, di, df, p, Q, U)
+[PderIn, PderFin] =calcularPuntDer(k, l, T, di, df, p, Q, U)
 
 R = np.dot(NT,Q[1:-1])
 
@@ -78,6 +79,20 @@ if len(Q[0])==2:
   P = np.zeros((n+1,2), float) #Inicialización del vector de Puntos de Control
 else:
   P = np.zeros((n+1,3), float)
+
+
+# for i in range(len(P)): #Implementación sin derivadas 
+#   if i <= k:
+#     for j in range(len(P[i])):
+#       #print(PderIn[i][j])
+#       P[i][j] = [i][j]
+#       #P[i][j] = PderIn[i][j]
+#   elif i < n-l:
+#     for j in range(len(P[i])):
+#       P[i][j] = Pi[i-(k+1)][j]
+#   else:
+#     for j in range(len(P[i])):
+#       P[i][j] = PderFin[i-(k+1)-len(Pi)][j]
 
 contElement = 0
 for i in range(len(P)): #Implementación sin derivadas 
@@ -92,10 +107,11 @@ for i in range(len(P)): #Implementación sin derivadas
       P[i][j] = Pi[contElement][j]
     contElement += 1
 
+#print(P)
 grado = p
 U = U[p:-p] #Reducción puntos repetidos
 
-if len([0]) ==2:
+if len(Q[0]) ==2:
   (X, Y) = Boor(grado, P, U)
   plt.scatter(P[:,0], P[:,1],marker='o', color = 'black', label="Puntos de control") 
   plt.scatter(Q[:,0], Q[:,1],marker='X', color = 'green', label="Datos Q") 

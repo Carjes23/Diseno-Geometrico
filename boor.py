@@ -47,7 +47,11 @@ def Boor(grado, puntos, nodos, numPuntosPorIntervalo = 20):
     return (X, Y)
        
 def ampliarNodos(nodos, grado):
-    primerElemento = nodos[0]
+    try:
+      primerElemento = nodos[0]
+    except:
+      print("Número inválido de puntos de control para el grado dado")
+      exit()
     ultimoElemento = nodos[-1]
     for i in range(grado):
         nodos.insert(0,primerElemento)
